@@ -195,6 +195,7 @@ export default {
     },
     handleClickRow(e, val) {
       router.push(`/productDetail/${val.item.raw.id}`)
+
     },
   },
 

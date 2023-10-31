@@ -1,0 +1,9 @@
+build/
+tests/
+node_modules/
+src/
+public/
+coverage/
+**/*-min.js
+**/*.min.js
+

@@ -1,0 +1,45 @@
+import request, {Method} from "@/api/axios"
+
+export function uploadFile (param){
+  return request({
+    url: '/upload',
+    headers: { 'Content-Type': 'multipart/form-data'},
+    method: Method.POST,
+    data: param,
+  });
+}
+export function getAllProduct (){
+  return request({
+    url: '/product',
+    headers: { 'Content-Type': 'application/json'},
+    method: Method.GET,
+    needToken: true,
+  });
+}
+
+export function getDetailProduct (id){
+  return request({
+    url: `/product/${id}`,
+    headers: { 'Content-Type': 'application/json'},
+    method: Method.GET,
+    needToken: true,
+  });
+}
+
+export function createProduct (data){
+  return request({
+    url: '/product',
+    headers: { 'Content-Type': 'application/json'},
+    method: Method.POST,
+    needToken: true,
+    data: data
+  });
+}
+export function getCategory (){
+  return request({
+    url: '/category',
+    headers: { 'Content-Type': 'application/json'},
+    method: Method.GET,
+    needToken: true,
+  });
+}

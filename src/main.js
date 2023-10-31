@@ -12,7 +12,8 @@ import moshaToast from 'mosha-vue-toastify'
 import 'mosha-vue-toastify/dist/style.css'
 import { createApp } from 'vue'
 import moment from "moment/moment"
-
+import { LoadingPlugin } from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/css/index.css'
 
 loadFonts()
 
@@ -23,18 +24,26 @@ app.config.globalProperties.formatPrice = function (value) {
   const formatter = new Intl.NumberFormat('vi-VN', {
     style: 'currency',
     currency: 'VND',
-  });
-  return formatter.format(value);
+  })
+  return formatter.format(value)
 }
 app.config.globalProperties.formatDateTime = function (value) {
-  return moment(String(value)).format('hh:mm:ss - DD/MM/YYYY');
+  return moment(String(value)).format('hh:mm:ss - DD/MM/YYYY')
 
 }
 // Use plugins
-app.use(moshaToast)
+app.use(moshaToast, {
+  transition: 'slide',
+  hideProgressBar: 'true',
+
+})
 app.use(vuetify)
 app.use(createPinia())
 app.use(router)
+app.use(LoadingPlugin, {
+  color: '#00A9FF',
+  loader: 'bars',
+})
 
 // Mount vue app
 app.mount('#app')

@@ -17,7 +17,7 @@
           </VCol>
         </VRow>
         <VRow>
-          <VCol cols="6" class="form-item">
+          <VCol cols="12" sm="6" class="form-item">
             <v-autocomplete
               :items="categoryArr"
               v-model="formProduct.category_id"
@@ -36,7 +36,7 @@
               </template>
             </v-autocomplete>
           </VCol>
-          <VCol cols="6">
+          <VCol cols="12" sm="6">
             <VTextField
               label="Tên sản phẩm"
               id="product-name"
@@ -48,7 +48,7 @@
           </VCol>
         </VRow>
         <VRow>
-          <VCol cols="6" class="form-item">
+          <VCol cols="12" sm="6" class="form-item">
             <VTextField
               id="quantity"
               label="Số lượng"
@@ -59,7 +59,7 @@
               persistent-placeholder
             />
           </VCol>
-          <VCol cols="6">
+          <VCol cols="12" sm="6">
             <VTextField
               id="price"
               label="Giá sản phẩm"
@@ -146,17 +146,21 @@ export default {
       router.back()
     },
     handleSaveProduct() {
-      this.loading = true
+      let load = this.$loading.show()
       createProduct(this.formProduct).then(res => {
         this.$moshaToast('Thêm sản phẩm thành công',
           {
             type: 'success',
             transition: 'slide',
-            timeout: 3000,
           })
         router.push('/products')
-      }).catch()
-      this.loading = false
+        load.hide()
+      }).catch(
+        e => {
+          load.hide()
+
+        },
+      )
     },
     getDataCategory() {
       getCategory().then(res => {
@@ -173,7 +177,9 @@ export default {
           {
             type: 'success',
             transition: 'slide',
-            timeout: 3000,
+            hideProgressBar: 'true',
+            timeout: 2000,
+
           })
         const form = {
           'image': val[0],

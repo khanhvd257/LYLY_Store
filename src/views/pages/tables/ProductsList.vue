@@ -1,19 +1,23 @@
 <template>
   <div style="padding: 16px">
-    <div style="display: flex; justify-content: space-between; margin-bottom: 16px">
-      <div  style="display: flex; gap:10px">
-        <VTextField style="width: 300px" density="compact" label="Tên sản phẩm" clearable
+    <VRow align="center" class="mb-3">
+      <VCol cols="12" sm="4">
+        <VTextField density="compact" label="Tên sản phẩm" clearable
                     append-inner-icon="mdi-magnify"
+                    v-model="searchForm.name"
+                    @update:modelValue="getDataProducts"
         />
+      </VCol>
+      <VCol cols="12" sm="4">
         <v-autocomplete
           :items="categoryArr"
           v-model="searchForm.category_id"
           density="compact"
-          style="width: 300px"
           color="blue-grey-lighten-2"
           item-title="name"
           label="Danh mục sản phẩm"
           item-value="id"
+          @update:modelValue="getDataProducts"
         >
           <template v-slot:item="{ props, item }">
             <v-list-item
@@ -24,27 +28,40 @@
             ></v-list-item>
           </template>
         </v-autocomplete>
-      </div>
-      <VBtn color="primary" class="mb-2" @click="handleAddProduct">Thêm mới</VBtn>
-    </div>
+      </VCol>
+      <VCol sm="3" cols="6">
+        <VSelect label="Trạng thái sản phẩm" density="compact" :items="statusProduct"
+                 item-title="title" item-value="value" v-model="searchForm.status"
+                 @update:modelValue="getDataProducts"
+        />
+      </VCol>
+      <VCol sm="1" cols="6">
+        <VBtn append-icon="mdi-add" color="primary" class="mb-2" @click="handleAddProduct">Thêm</VBtn>
+      </VCol>
+    </VRow>
     <VDataTable
-      :loading="loading"
+      loading="primary"
       :headers="header"
       :items="productData"
+      fixed-header="true"
+      items-per-page-text="Số sản phẩm hiện thị"
       item-value="name"
+      hover
+      loading-text="đang loadnpm i vue-loading-overlay"
       class="elevation-1"
-      show-select
       @click:row="handleClickRow"
     >
       <template v-slot:item.image_url="{item}">
-        <img class="img-product" :src="item.raw.image_url" height="60" width="60" alt="">
+        <div class="product-img">
+          <img :src="item.raw.image_url" alt="">
+        </div>
       </template>
       <template v-slot:item.created_at="{item}">
         <span>{{ formatDate(item.raw.created_at) }}</span>
       </template>
       <template v-slot:item.status="{item}">
         <VChip v-if="item.raw.status == 1" color="success">Đang bán</VChip>
-        <VChip v-if="item.raw.status == 0" color="error">Ngưng bán</VChip>
+        <VChip v-if="item.raw.status == 0" color="error">Ngừng bán</VChip>
       </template>
       <template v-slot:item.action="{item}">
         <div class="text-center">
@@ -106,9 +123,24 @@ export default {
         { title: 'Hành động', key: 'action', align: 'center', width: 120 },
       ],
       searchForm: {
-        category_id: [],
+        category_id: '',
         name: '',
+        status: 1,
       },
+      statusProduct: [
+        {
+          title: 'Tất cả',
+          value: '',
+        },
+        {
+          title: 'Đang bán',
+          value: 1,
+        },
+        {
+          title: 'Dừng bán',
+          value: 0,
+        },
+      ],
       categoryArr: [],
       loading: true,
       actions: [
@@ -148,30 +180,39 @@ export default {
       })
     },
     getDataProducts() {
-      getAllProduct().then(res => {
-        this.loading = false
+      let load = this.$loading.show()
+      getAllProduct(this.searchForm).then(res => {
         this.productData = res.data
-
+        load.hide()
       }).catch((error) => {
         console.error('Error fetching data from API 1:', error)
+        load.hide()
       })
+
     },
     handleChangeCate(val) {
       this.searchForm.category_id = val
     },
-    handleClickRow(e, val){
+    handleClickRow(e, val) {
       router.push(`/productDetail/${val.item.raw.id}`)
-    }
+    },
   },
 
 
 }
 </script>
 <style scoped lang="scss">
-.img-product {
-  border-radius: 8px;
-  object-fit: cover;
-  margin: 6px 0px;
-  padding: 2px;
+.product-img {
+  width: 60px;
+  height: 60px;
+  margin: 6px 10px;
+
+  img {
+    object-fit: cover;
+    width: 100%;
+    border-radius: 8px;
+    height: 100%;
+
+  }
 }
 </style>

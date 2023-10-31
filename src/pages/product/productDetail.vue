@@ -34,22 +34,24 @@
       <span>{{ formatDateTime(productDetail.created_at) }}</span>
     </div>
 
-    <div class="content">
-      <VCard class="content-left">
-        <img
-          width="500"
-          height="500"
-          :src="productDetail.image_url"
-          class="product-img"
-        />
-      </VCard>
-      <VCard class="content-right">
-        <strong>
-          Mô tả sản phẩm
-        </strong>
-        <div style="margin-left: 10px" v-html="productDetail.description"/>
-      </VCard>
-    </div>
+    <VRow class="content">
+      <VCol cols="12" sm="6" class="content-left">
+        <div class="product-img">
+          <img
+            :src="productDetail.image_url"
+          />
+        </div>
+      </VCol>
+      <VCol cols="12" sm="6">
+        <VCard class="content-right">
+          <strong>
+            Mô tả sản phẩm
+          </strong>
+          <div style="margin-left: 10px" v-if="productDetail.description" v-html="productDetail.description"/>
+          <div v-else>Không có mô tả</div>
+        </VCard>
+      </VCol>
+    </VRow>
 
 
   </VCard>
@@ -70,20 +72,13 @@ export default {
       },
     }
   },
-  mounted() {
+  created() {
     getDetailProduct(this.id).then(res => {
-      console.log(res)
       this.productDetail = res.data
     })
   },
   methods: {
-    formatCurrency(price) {
-      const formatter = new Intl.NumberFormat('vi-VN', {
-        style: 'currency',
-        currency: 'VND',
-      })
-      return formatter.format(price)
-    },
+    //
   },
 }
 </script>
@@ -108,15 +103,21 @@ export default {
   }
 
   .content-right {
-    width: 600px;
+    max-width: 600px;
     padding: 6px 16px;
   }
 }
 
 .product-img {
-  object-fit: cover;
   border-radius: 12px;
-  padding: 8px 16px;
+  max-width: 600px;
+  max-height: 700px;
   margin: 0 10px;
+
+  img {
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+  }
 }
 </style>

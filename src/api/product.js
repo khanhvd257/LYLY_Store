@@ -1,13 +1,5 @@
 import request, {Method} from "@/api/axios"
 
-export function uploadFile (param){
-  return request({
-    url: '/upload',
-    headers: { 'Content-Type': 'multipart/form-data'},
-    method: Method.POST,
-    data: param,
-  });
-}
 export function getAllProduct (params){
   return request({
     url: '/product',

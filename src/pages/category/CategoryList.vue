@@ -12,7 +12,6 @@
       :items="categoryArr"
       item-value="name"
       class="elevation-1"
-      show-select
     >
       <template v-slot:item.image_url="{item}">
         <img class="img-product" :src="item.raw.image_url" height="60" width="60" alt="">
@@ -115,7 +114,7 @@ export default {
       }
     },
     handleAddProduct() {
-      router.push('products/customize')
+      router.push('category/add')
     },
     handleEditProduct(productId) {
       router.push({

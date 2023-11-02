@@ -27,6 +27,11 @@ const router = createRouter({
           component: () => import('../pages/category/CategoryList.vue'),
         },
         {
+          path: 'category/add',
+          component: () => import('../pages/category/categoryCreate.vue'),
+        },
+
+        {
           path: 'products',
           component: () => import('../pages/products.vue'),
         },

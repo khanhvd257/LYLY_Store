@@ -125,7 +125,7 @@ export default {
       searchForm: {
         category_id: '',
         name: '',
-        status: 1,
+        status: '',
       },
       statusProduct: [
         {

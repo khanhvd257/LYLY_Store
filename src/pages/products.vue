@@ -1,5 +1,5 @@
 <script setup>
-import ProductList from '@/views/pages/tables/ProductsList.vue'
+import ProductList from '@/views/pages/tables/ProductsList.vue';
 
 </script>
 
@@ -12,3 +12,4 @@ import ProductList from '@/views/pages/tables/ProductsList.vue'
     </VCol>
   </VRow>
 </template>
+

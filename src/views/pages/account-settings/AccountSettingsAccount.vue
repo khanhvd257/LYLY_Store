@@ -1,7 +1,7 @@
 <script setup>
-import avatar1 from '@images/avatars/avatar-1.png'
-import axios_helper from "@/api/axios"
-import { uploadFile } from "@/api/product"
+import axios_helper from "@/api/axios";
+import avatar1 from '@images/avatars/avatar-1.png';
+// import { uploadFile } from "@/api/product"
 const accountData = {
   avatarImg: avatar1,
   firstName: 'john',

@@ -1,5 +1,5 @@
-import { createRouter, createWebHistory } from 'vue-router'
 import { requireAuth } from "@/plugins/auth"
+import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,6 +23,14 @@ const router = createRouter({
           component: () => import('../pages/doanhThu.vue'),
         },
         {
+          path: 'khach-hang',
+          component: () => import('../pages/quanLyKhachHang.vue'),
+        },
+        {
+          path: 'danhgiasp',
+          component: () => import('../pages/quanlydanhgiasp.vue'),
+        },
+        {
           path: 'category',
           component: () => import('../pages/category/CategoryList.vue'),
         },
@@ -34,6 +42,10 @@ const router = createRouter({
         {
           path: 'products',
           component: () => import('../pages/products.vue'),
+        },
+        {
+          path: 'khachHang',
+          component: () => import('../pages/quanLyKhachHang.vue'),
         },
         {
           path: 'productDetail/:id',

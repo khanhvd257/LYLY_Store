@@ -1,4 +1,4 @@
-import request, {Method} from "@/api/axios"
+import request, { Method } from "@/api/axios";
 
 export function getAllProduct (params){
   return request({
@@ -31,6 +31,14 @@ export function createProduct (data){
 export function getCategory (){
   return request({
     url: '/category',
+    headers: { 'Content-Type': 'application/json'},
+    method: Method.GET,
+    needToken: true,
+  });
+}
+export function getCustomer (){
+  return request({
+    url: '/customer',
     headers: { 'Content-Type': 'application/json'},
     method: Method.GET,
     needToken: true,

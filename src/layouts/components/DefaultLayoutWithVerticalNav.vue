@@ -1,10 +1,9 @@
 <script setup>
-import { useTheme } from 'vuetify'
 import upgradeBannerDark from '@images/pro/upgrade-banner-dark.png'
 import upgradeBannerLight from '@images/pro/upgrade-banner-light.png'
 import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
 import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
-import VerticalNavSectionTitle from '@/@layouts/components/VerticalNavSectionTitle.vue'
+import { useTheme } from 'vuetify'
 
 // Components
 import Footer from '@/layouts/components/Footer.vue'
@@ -78,6 +77,20 @@ const upgradeBanner = computed(() => {
           title: 'Quản lý doanh thu',
           icon: 'game-icons:cash',
           to: '/doanh-thu',
+        }"
+      />
+      <VerticalNavLink
+        :item="{
+          title: 'Quản lý khách hàng',
+          icon: 'game-icons:cash',
+          to: '/khach-hang',
+        }"
+      />
+      <VerticalNavLink
+        :item="{
+          title: 'Quản lý đánh giá sản phẩm',
+          icon: 'game-icons:cash',
+          to: '/danhgiasp',
         }"
       />
     </template>

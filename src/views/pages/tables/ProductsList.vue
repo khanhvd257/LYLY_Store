@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 16px">
+  <div style="padding: 16px;">
     <VRow align="center" class="mb-3">
       <VCol cols="12" sm="4">
         <VTextField density="compact" label="Tên sản phẩm" clearable
@@ -52,8 +52,8 @@
       @click:row="handleClickRow"
     >
       <template v-slot:item.name="{item}">
-        <div class="product-name">
-          <span>{{ item.raw.name }}</span>
+        <div class="clamp-text">
+          {{ item.raw.name }}
         </div>
       </template>
       <template v-slot:item.image_url="{item}">
@@ -97,11 +97,11 @@
   </div>
 </template>
 <script>
-import { VDataTable } from 'vuetify/labs/VDataTable'
 import { getAllProduct, getCategory } from "@/api/product"
+import { VDataTable } from 'vuetify/labs/VDataTable'
 
-import moment from 'moment'
 import router from "@/router"
+import moment from 'moment'
 
 export default {
   created() {
@@ -117,10 +117,10 @@ export default {
         {
           title: 'Tên sản phẩm',
           align: 'start',
+          slot: 'name',
           sortable: false,
           key: 'name',
           width: 200,
-          slot: 'name',
         },
         { title: 'Hình ảnh', key: 'image_url', slot: 'image', width: 120 },
         { title: 'Trạng thái hàng', key: 'status' },
@@ -209,24 +209,17 @@ export default {
 }
 </script>
 <style scoped lang="scss">
-.product-name {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  width: 200px;
-}
-
 .product-img {
-  width: 60px;
-  height: 60px;
-  margin: 6px 10px;
+  block-size: 60px;
+  inline-size: 60px;
+  margin-block: 6px;
+  margin-inline: 10px;
 
   img {
-    object-fit: cover;
-    width: 100%;
     border-radius: 8px;
-    height: 100%;
-
+    block-size: 100%;
+    inline-size: 100%;
+    object-fit: cover;
   }
 }
 </style>

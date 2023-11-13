@@ -1,7 +1,7 @@
 <template>
-  <VCard style="padding: 16px" title="QUẢN LÝ DANH MỤC">
-    <div style="display: flex; justify-content: space-between; margin-bottom: 20px">
-      <div style="width: 300px">
+  <VCard style="padding: 16px;" title="QUẢN LÝ DANH MỤC">
+    <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+      <div style="width: 300px;">
         <VTextField  density="compact" label="Tên danh mục" clearable append-inner-icon="mdi-magnify"/>
       </div>
       <VBtn append-icon="mdi-add" color="primary" class="mb-2" @click="handleAddProduct">Thêm mới</VBtn>
@@ -52,11 +52,11 @@
   </VCard>
 </template>
 <script>
-import { VDataTable } from 'vuetify/labs/VDataTable'
 import { getAllProduct, getCategory } from "@/api/product"
+import { VDataTable } from 'vuetify/labs/VDataTable'
 
-import moment from 'moment'
 import router from "@/router"
+import moment from 'moment'
 
 export default {
   name: "CategoryList",
@@ -141,9 +141,10 @@ export default {
 </script>
 <style scoped lang="scss">
 .img-product {
-  border-radius: 8px;
-  object-fit: cover;
-  margin: 6px 0px;
   padding: 2px;
+  border-radius: 8px;
+  margin-block: 6px;
+  margin-inline: 0;
+  object-fit: cover;
 }
 </style>

@@ -51,6 +51,11 @@
       class="elevation-1"
       @click:row="handleClickRow"
     >
+      <template v-slot:item.name="{item}">
+        <div class="product-name">
+          <span>{{ item.raw.name }}</span>
+        </div>
+      </template>
       <template v-slot:item.image_url="{item}">
         <div class="product-img">
           <img :src="item.raw.image_url" alt="">
@@ -115,6 +120,7 @@ export default {
           sortable: false,
           key: 'name',
           width: 200,
+          slot: 'name',
         },
         { title: 'Hình ảnh', key: 'image_url', slot: 'image', width: 120 },
         { title: 'Trạng thái hàng', key: 'status' },
@@ -203,6 +209,13 @@ export default {
 }
 </script>
 <style scoped lang="scss">
+.product-name {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 200px;
+}
+
 .product-img {
   width: 60px;
   height: 60px;

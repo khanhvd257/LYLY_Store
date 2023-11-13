@@ -51,6 +51,11 @@
       class="elevation-1"
       @click:row="handleClickRow"
     >
+      <template v-slot:item.name="{item}">
+        <div class="clamp-text">
+          {{ item.raw.name }}
+        </div>
+      </template>
       <template v-slot:item.image_url="{item}">
         <div class="product-img">
           <img :src="item.raw.image_url" alt="">
@@ -112,6 +117,7 @@ export default {
         {
           title: 'Tên sản phẩm',
           align: 'start',
+          slot: 'name',
           sortable: false,
           key: 'name',
           width: 200,

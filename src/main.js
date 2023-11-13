@@ -28,7 +28,7 @@ app.config.globalProperties.formatPrice = function (value) {
   return formatter.format(value)
 }
 app.config.globalProperties.formatDateTime = function (value) {
-  return moment(String(value)).format('hh:mm:ss - DD/MM/YYYY')
+  return moment(String(value)).format('HH:mm:ss - DD/MM/YYYY')
 
 }
 // Use plugins

@@ -66,9 +66,8 @@
 import { initEditor } from "@/components/editor/config"
 import editor from "@tinymce/tinymce-vue"
 import { uploadFile } from "@/api"
-import { createProduct, getCategory } from "@/api/product"
 import router from "@/router"
-import { createCategory } from "@/api/category"
+import { createCategory, getCategoryById } from "@/api/category"
 
 export default {
   name: "categoryCreate",
@@ -89,9 +88,19 @@ export default {
       categoryArr: [],
     }
   },
+  created() {
+    this.init()
+  },
 
   methods: {
-
+    init() {
+      const id = this.$route.query.category_id
+      console.log(this.$route.query.category_id)
+      if (id)
+        getCategoryById(id).then(res => {
+          this.formCategory = res.data
+        })
+    },
     handleSaveCategory() {
       let load = this.$loading.show()
       createCategory(this.formCategory).then(res => {

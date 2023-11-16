@@ -36,7 +36,7 @@
         />
       </VCol>
       <VCol sm="1" cols="6">
-        <VBtn append-icon="mdi-add" color="primary" class="mb-2" @click="handleAddProduct">Thêm</VBtn>
+        <VBtn color="primary" class="mb-2" @click="handleAddProduct">Thêm mới</VBtn>
       </VCol>
     </VRow>
     <VDataTable
@@ -71,7 +71,6 @@
       <template v-slot:item.action="{item}">
         <div class="text-center">
           <v-menu
-            open-on-hover
           >
             <template v-slot:activator="{ props }">
               <VBtn

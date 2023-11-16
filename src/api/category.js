@@ -9,3 +9,11 @@ export function createCategory(data) {
     data: data,
   })
 }
+
+export function getCategoryById(id) {
+  return request({
+    url: `/category/${id}`,
+    headers: { 'Content-Type': 'application/json' },
+    needToken: true,
+  })
+}

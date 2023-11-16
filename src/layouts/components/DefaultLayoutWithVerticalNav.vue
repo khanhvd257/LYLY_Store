@@ -80,6 +80,13 @@ const upgradeBanner = computed(() => {
           to: '/doanh-thu',
         }"
       />
+      <VerticalNavLink
+        :item="{
+          title: 'Quản lý order',
+          icon: 'icon-park-outline:shopping',
+          to: '/order-products',
+        }"
+      />
     </template>
 
 

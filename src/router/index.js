@@ -19,6 +19,10 @@ const router = createRouter({
           component: () => import('../pages/account-settings.vue'),
         },
         {
+          path: 'order',
+          component: () => import('../pages/order.vue'),
+        },
+        {
           path: 'doanh-thu',
           component: () => import('../pages/doanhThu.vue'),
         },
@@ -46,6 +50,10 @@ const router = createRouter({
         {
           path: 'add',
           component: () => import('../pages/productCreate.vue'),
+        },
+        {
+          path: 'order-products',
+          component : () => import('../pages/order.vue')
         },
       ],
     },

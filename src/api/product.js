@@ -8,15 +8,7 @@ export function uploadFile (param){
     data: param,
   });
 }
-export function getAllProduct (params){
-  return request({
-    url: '/product',
-    headers: { 'Content-Type': 'application/json'},
-    method: Method.GET,
-    needToken: true,
-    params: params
-  });
-}
+
 
 export function getDetailProduct (id){
   return request({

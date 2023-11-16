@@ -5,7 +5,7 @@
         <VTextField density="compact" label="Mã đơn hàng" clearable
                     append-inner-icon="mdi-magnify"
                     v-model="searchForm.name"
-                    @update:modelValue="getDataProducts"
+                    @update:modelValue="getDataOrders"
         />
       </VCol>
     </VRow>
@@ -18,54 +18,40 @@
       item-value="name"
       hover
       loading-text="đang loadnpm i vue-loading-overlay"
-      class="elevatnpion-1"
-      @click:row="handleClickRow"
+      class="elevation-1"
     >
+      <template v-slot:item.image_url="{item}">
+        <div class="product-img">
+          <img :src="item.raw.image_url" alt="">
+        </div>
+      </template>
+      <template v-slot:item.created_at="{item}">
+        <span>{{ formatDate(item.raw.created_at) }}</span>
+      </template>
+      <template v-slot:item.status="{item}">
+        <VChip v-if="item.raw.status == 'Confirmed'" color="green">Đã xác nhận</VChip>
+        <VChip v-if="item.raw.status == 'Cancel'" color="error">Hủy bỏ</VChip>
+        <VChip v-if="item.raw.status == 'Pending'" color="primary">Chờ xác nhận</VChip>
+        <VChip v-if="item.raw.status == 'Done'" color="success">Hoàn thành</VChip>
+      </template>
       <template v-slot:item.action="{item}">
-        <div class="text-center">
-          <v-menu
-            open-on-hover
-          >
-            <template v-slot:activator="{ props }">
-              <VBtn
-                v-bind="props"
-                icon="mdi-dots-vertical"
-              />
-            </template>
-
-            <v-list width="100">
-              <v-list-item
-                v-for="(item, index) in actions"
-                :key="index"
-                @click="handleAction(item)"
-
-              >
-                <v-list-item-title>{{ item.title }}</v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
+        <div v-if="item.raw.status == 'Pending'" style="display: flex; gap: 6px">
+          <VBtn density="compact" color="success" icon="mdi-check" @click="handleConfirmOrder(item.raw)"/>
+          <VBtn color="error" density="compact" icon="iconoir:cancel" @click="handleCancelOrder"/>
         </div>
       </template>
     </VDataTable>
-<!--    <template>-->
-<!--      <div>-->
-<!--        &lt;!&ndash; Nút Sửa &ndash;&gt;-->
-<!--        <button @click="editItem">Sửa</button>-->
-
-<!--        &lt;!&ndash; Nút Xóa &ndash;&gt;-->
-<!--        <button @click="deleteItem">Xóa</button>-->
-<!--      </div>-->
-<!--    </template>-->
   </div>
 </template>
 <script>
+import { chapNhanDonHang, layDSorder } from "@/api/order"
 import { VDataTable } from 'vuetify/labs/VDataTable'
-import { layDSorder } from "@/api/order"
 
-import moment from 'moment'
+
 import router from "@/router"
 
 export default {
+  name: 'OrderProduct',
   created() {
     this.init()
   },
@@ -78,48 +64,50 @@ export default {
       header: [
         {
           title: 'Mã Đơn Hàng',
-          align: 'start',
+          align: 'center',
           sortable: false,
           key: 'id',
-          width: 200,
+          width: 100,
         },
-        { title: 'Tên Khách Hàng', key: 'username' },
-        { title: 'Thời Gian Đặt hàng ', key: 'order_date' },
-        { title: 'Ghi Chú', key: 'note' },
-        { title: 'Địa Điểm Giao Hàng', key: 'delivery_address' },
-        {title: 'Trạng Thái Đơn Hàng', key:'status'},
-        { title: 'Hành động', key: 'action', align: 'center', width: 120 },
+        {
+          title: 'Tên Khách Hàng', key: 'username', width: 180,
+        },
+        { title: 'Thời Gian Đặt hàng ', key: 'order_date', width: 150 },
+        { title: 'Ghi Chú', key: 'note', width: 200 },
+        { title: 'Địa Điểm Giao Hàng', key: 'delivery_address', width: 200 },
+        { title: 'Trạng Thái Đơn Hàng', key: 'status', width: 100, align: 'center' },
+        { title: 'Hành động', key: 'action', align: 'center', slot: 'action', width: 120 },
       ],
-      searchForm: {
-        category_id: '',
-        name: '',
-        status: 1,
-      },
+      // header: [
+      //   {
+      //     title: 'Tên sản phẩm',
+      //     align: 'start',
+      //     sortable: false,
+      //     key: 'name',
+      //     width: 200,
+      //   },
+      //   { title: 'Hình ảnh', key: 'image_url', slot: 'image', width: 120 },
+      //   { title: 'Trạng thái hàng', key: 'status' },
+      //   { title: 'Số lương', key: 'quantity' },
+      //   { title: 'Thời gian tạo', key: 'created_at' },
+      //   { title: 'Hành động', key: 'action', align: 'center', width: 120 },
+      // ],
+      searchForm: {},
     }
   },
   methods: {
-    formatDate(value) {
-      return moment(String(value)).format('hh:mm:ss - DD/MM/YYYY')
-    },
     init() {
       this.getDataOrders()
     },
-    getDataCategory() {
-      getCategory().then(res => {
-        this.loading = false
-        this.categoryArr = res.data
-      }).catch((error) => {
-        console.error('Error fetching data from API 1:', error)
+    handleConfirmOrder(val) {
+      chapNhanDonHang(val.id).then(res => {
+
       })
     },
-    handleAction(val) {
-      if (val == 'edit') {
+    handleCancelOrder() {
 
-      }
     },
-    handleAddProduct() {
-      router.push('products/customize')
-    },
+
     handleEditProduct(productId) {
       router.push({
         path: 'products/customize',

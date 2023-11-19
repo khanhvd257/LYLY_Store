@@ -3,7 +3,7 @@ import axios from 'axios'
 import qs from 'qs'
 // Tạo một phiên bản Axios đã cấu hình với các tùy chọn chung
 
-const BASE_URL = 'http://10.30.1.202:8000/api'
+const BASE_URL = 'http://127.0.0.1:8000/api'
 const service = axios.create({
   timeout: 10000,
   baseURL: BASE_URL,

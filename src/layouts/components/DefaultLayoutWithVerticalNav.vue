@@ -81,6 +81,13 @@ const upgradeBanner = computed(() => {
       />
       <VerticalNavLink
         :item="{
+          title: 'Quản lý order',
+          icon: 'icon-park-outline:shopping',
+          to: '/order-products',
+        }"
+      />
+      <VerticalNavLink
+        :item="{
           title: 'Quản lý khách hàng',
           icon: 'game-icons:cash',
           to: '/khach-hang',

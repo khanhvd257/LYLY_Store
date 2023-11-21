@@ -5,7 +5,7 @@
         <VTextField density="compact" label="Tên sản phẩm" clearable
                     append-inner-icon="mdi-magnify"
                     v-model="searchForm.name"
-                    @update:modelValue="getDataProducts"
+                    @click:appendInner="getDataProducts"
         />
       </VCol>
       <VCol cols="12" sm="4">
@@ -36,7 +36,7 @@
         />
       </VCol>
       <VCol sm="1" cols="6">
-        <VBtn color="primary" class="mb-2" @click="handleAddProduct">Thêm mới</VBtn>
+        <VBtn color="primary" class="mb-2" @click="handleAddProduct">Thêm</VBtn>
       </VCol>
     </VRow>
     <VDataTable
@@ -65,8 +65,13 @@
         <span>{{ formatDate(item.raw.created_at) }}</span>
       </template>
       <template v-slot:item.status="{item}">
-        <VChip v-if="item.raw.status == 1" color="success">Đang bán</VChip>
-        <VChip v-if="item.raw.status == 0" color="error">Ngừng bán</VChip>
+        <VChip variant="text" v-if="item.raw.status == 1" color="success">Đang bán</VChip>
+        <VChip variant="text" v-if="item.raw.status == 0" color="error">Ngừng bán</VChip>
+      </template>
+      <template v-slot:item.stock="{item}">
+        <VChip variant="elevated" v-if="item.raw.quantity <= 50 && item.raw.quantity >0" color="warning">Gần hết hàng</VChip>
+        <VChip variant="elevated" v-if="item.raw.quantity >50" color="success">Còn nhiều hàng</VChip>
+        <VChip variant="elevated" v-if="item.raw.quantity == 0" color="error">Hết hàng</VChip>
       </template>
       <template v-slot:item.action="{item}">
         <div class="text-center">
@@ -81,12 +86,12 @@
 
             <v-list width="100">
               <v-list-item
-                v-for="(item, index) in actions"
+                v-for="(_item, index) in actions"
                 :key="index"
-                @click="handleAction(item)"
+                @click="handleAction(_item.id, item.raw.id)"
 
               >
-                <v-list-item-title>{{ item.title }}</v-list-item-title>
+                <v-list-item-title>{{ _item.title }}</v-list-item-title>
               </v-list-item>
             </v-list>
           </v-menu>
@@ -96,11 +101,12 @@
   </div>
 </template>
 <script>
-import { getAllProduct, getCategory } from "@/api/product"
+import { deleteProduct, getAllProduct, getCategory } from "@/api/product"
 import { VDataTable } from 'vuetify/labs/VDataTable'
 
 import router from "@/router"
 import moment from 'moment'
+import { debounce as _debounce } from 'lodash/debounce'
 
 export default {
   created() {
@@ -119,11 +125,12 @@ export default {
           slot: 'name',
           sortable: false,
           key: 'name',
-          width: 200,
+          width: 300,
         },
         { title: 'Hình ảnh', key: 'image_url', slot: 'image', width: 120 },
-        { title: 'Trạng thái hàng', key: 'status' },
         { title: 'Số lương', key: 'quantity' },
+        { title: 'Trạng thái hàng', key: 'status' },
+        { title: 'Tình trạng hàng', slot: 'stock', key: 'stock' },
         { title: 'Thời gian tạo', key: 'created_at' },
         { title: 'Hành động', key: 'action', align: 'center', width: 120 },
       ],
@@ -149,19 +156,20 @@ export default {
       categoryArr: [],
       loading: true,
       actions: [
-        { title: 'Sửa' },
-        { title: 'Xóa' },
+        { id: 'edit', title: 'Sửa' },
+        { id: 'delete', title: 'Xóa' },
       ],
     }
   },
   methods: {
     formatDate(value) {
-      return moment(String(value)).format('hh:mm:ss - DD/MM/YYYY')
+      return moment(String(value)).format('HH:mm:ss - DD/MM/YYYY')
     },
     init() {
       this.getDataProducts()
       this.getDataCategory()
     },
+
     getDataCategory() {
       getCategory().then(res => {
         this.loading = false
@@ -170,9 +178,31 @@ export default {
         console.error('Error fetching data from API 1:', error)
       })
     },
-    handleAction(val) {
-      if (val == 'edit') {
-
+    handleAction(handle, id) {
+      console.log(id)
+      if (handle == 'edit') {
+        this.$router.push({
+          name: 'edit-product',
+          query: { id: id },
+        })
+      }
+      if (handle == 'delete') {
+        deleteProduct(id).then(res => {
+          this.$moshaToast(res.message,
+            {
+              type: 'success',
+              transition: 'slide',
+              timeout: 3000,
+            })
+          this.getDataProducts()
+        }).catch(err => {
+          this.$moshaToast(err.response.data.message,
+            {
+              type: 'warning',
+              transition: 'slide',
+              timeout: 3000,
+            })
+        })
       }
     },
     handleAddProduct() {

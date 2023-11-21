@@ -18,11 +18,12 @@ export function huyOrder() {
   })
 }
 
-export function layDSorder() {
+export function layDSorder(params) {
   return request({
-    url: 'order',
+    url: 'orders',
     headers: { 'Content-Type': 'application/json' },
     method: Method.GET,
     needToken: true,
+    params: params
   })
 }

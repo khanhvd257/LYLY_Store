@@ -14,6 +14,10 @@ import { createApp } from 'vue'
 import moment from "moment/moment"
 import { LoadingPlugin } from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/css/index.css'
+import VueLodash from 'vue-lodash'
+import _ from 'lodash';
+// const _ = require('lodash')
+
 
 loadFonts()
 

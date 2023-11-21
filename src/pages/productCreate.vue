@@ -90,6 +90,8 @@
         <VCol>
           <v-switch
             class="mt-0 ms-2"
+            :true-value="1"
+            :false-value="0"
             color="primary"
             density="compact"
             hide-details
@@ -113,7 +115,7 @@
 import { initEditor } from "@/components/editor/config"
 import editor from "@tinymce/tinymce-vue"
 import { uploadFile } from "@/api"
-import { createProduct, getCategory } from "@/api/product"
+import { createProduct, getCategory, getDetailProduct, updateProduct } from "@/api/product"
 import router from "@/router"
 
 export default {
@@ -129,38 +131,65 @@ export default {
         price: 0,
         quantity: 0,
         image_url: null,
-        status: false,
+        status: 1,
         category_id: '',
       },
       loading: false,
       fileImage: null,
       initEditor,
       categoryArr: [],
+      isEdit: false,
     }
   },
   created() {
     this.getDataCategory()
+    if (this.$route.query.id) {
+      this.getDetailData(this.$route.query.id)
+      this.isEdit = true
+    }
   },
   methods: {
     handleBack() {
       router.back()
     },
+    getDetailData(id) {
+      getDetailProduct(id).then(res => {
+        this.formProduct = res.data
+      })
+    },
     handleSaveProduct() {
       let load = this.$loading.show()
-      createProduct(this.formProduct).then(res => {
-        this.$moshaToast('Thêm sản phẩm thành công',
-          {
-            type: 'success',
-            transition: 'slide',
-          })
-        router.push('/products')
-        load.hide()
-      }).catch(
-        e => {
+      if (this.isEdit) {
+        delete this.formProduct.created_at
+        delete this.formProduct.updated_at
+        updateProduct(this.$route.query.id, this.formProduct).then(res => {
+          this.$moshaToast('Sửa sản phẩm thành công',
+            {
+              type: 'success',
+              transition: 'slide',
+            })
+        }).catch(e => {
+          this.$moshaToast('Lỗi',
+            {
+              type: 'success',
+              transition: 'slide',
+            })
+        })
+      } else {
+        createProduct(this.formProduct).then(res => {
+          this.$moshaToast('Thêm sản phẩm thành công',
+            {
+              type: 'success',
+              transition: 'slide',
+            })
+          router.push('/products')
           load.hide()
-
-        },
-      )
+        }).catch(
+          e => {
+          },
+        )
+      }
+      load.hide()
     },
     getDataCategory() {
       getCategory().then(res => {

@@ -61,6 +61,11 @@ const router = createRouter({
           component: () => import('../pages/productCreate.vue'),
         },
         {
+          path: 'products/customize',
+          name: 'edit-product',
+          component: () => import('../pages/productCreate.vue'),
+        },
+        {
           path: 'form-layouts',
           component: () => import('../pages/form-layouts.vue'),
         },

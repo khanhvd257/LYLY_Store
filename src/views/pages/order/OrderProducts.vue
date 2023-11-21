@@ -4,8 +4,14 @@
       <VCol cols="12" sm="4">
         <VTextField density="compact" label="Mã đơn hàng" clearable
                     append-inner-icon="mdi-magnify"
-                    v-model="searchForm.name"
-                    @update:modelValue="getDataOrders"
+                    v-model="searchForm.order_id"
+                    @click:appendInner="getDataOrders"
+        />
+      </VCol>
+      <VCol cols="12" sm="4">
+        <VSelect label="Trạng thái đơn hàng" density="compact" :items="statusOrder"
+                 item-title="title" item-value="value" v-model="searchForm.status"
+                 @update:modelValue="getDataOrders"
         />
       </VCol>
     </VRow>
@@ -20,24 +26,34 @@
       loading-text="đang loadnpm i vue-loading-overlay"
       class="elevation-1"
     >
-      <template v-slot:item.image_url="{item}">
+      <template v-slot:item.order_details[0].product.image_url="{item}">
         <div class="product-img">
-          <img :src="item.raw.image_url" alt="">
+          <img :src="item.raw.order_details[0].product.image_url" :alt="item.raw.order_details[0]">
+        </div>
+      </template>
+      <template v-slot:item.order_details[0].quantity="{item}">
+        <div class="product-img">
+          <span> {{ item.raw.order_details[0].quantity }}</span>
+        </div>
+      </template>
+      <template v-slot:item.order_details[0].product.name="{item}">
+        <div class="product-name clamp-text">
+          <span>{{ item.raw.order_details[0].product.name }}</span>
         </div>
       </template>
       <template v-slot:item.created_at="{item}">
         <span>{{ formatDate(item.raw.created_at) }}</span>
       </template>
       <template v-slot:item.status="{item}">
-        <VChip v-if="item.raw.status == 'Confirmed'" color="green">Đã xác nhận</VChip>
+        <VChip v-if="item.raw.status == 'Confirmed'" color="primary">Đã xác nhận</VChip>
         <VChip v-if="item.raw.status == 'Cancel'" color="error">Hủy bỏ</VChip>
-        <VChip v-if="item.raw.status == 'Pending'" color="primary">Chờ xác nhận</VChip>
+        <VChip v-if="item.raw.status == 'Pending'" color="warning">Chờ xác nhận</VChip>
         <VChip v-if="item.raw.status == 'Done'" color="success">Hoàn thành</VChip>
       </template>
       <template v-slot:item.action="{item}">
         <div v-if="item.raw.status == 'Pending'" style="display: flex; gap: 6px">
           <VBtn density="compact" color="success" icon="mdi-check" @click="handleConfirmOrder(item.raw)"/>
-          <VBtn color="error" density="compact" icon="iconoir:cancel" @click="handleCancelOrder"/>
+          <VBtn color="error" density="compact" icon="iconoir:cancel" @click="handleCancelOrder(item.raw)"/>
         </div>
       </template>
     </VDataTable>
@@ -62,21 +78,40 @@ export default {
     return {
       orderData: [],
       header: [
+        { title: 'Hành động', key: 'action', align: 'center', slot: 'action', width: 120, fixed: true },
         {
           title: 'Mã Đơn Hàng',
           align: 'center',
-          sortable: false,
           key: 'id',
           width: 100,
         },
         {
           title: 'Tên Khách Hàng', key: 'username', width: 180,
         },
-        { title: 'Thời Gian Đặt hàng ', key: 'order_date', width: 150 },
+        {
+          title: 'Hình ảnh',
+          key: 'order_details[0].product.image_url',
+          align: 'center',
+          slot: 'order_details[0].product.image_url',
+          width: 120,
+        },
+        {
+          title: 'Tên sản phẩm',
+          key: 'order_details[0].product.name',
+          slot: 'order_details[0].product.name',
+          width: 200,
+        },
+        {
+          title: 'Số lượng',
+          key: 'order_details[0].quantity',
+          slot: 'order_details[0].quantity',
+          width: 100,
+          align: 'center',
+        },
+        { title: 'Thời Gian Đặt hàng ', align: 'center', key: 'order_date', width: 150 },
         { title: 'Ghi Chú', key: 'note', width: 200 },
         { title: 'Địa Điểm Giao Hàng', key: 'delivery_address', width: 200 },
         { title: 'Trạng Thái Đơn Hàng', key: 'status', width: 100, align: 'center' },
-        { title: 'Hành động', key: 'action', align: 'center', slot: 'action', width: 120 },
       ],
       // header: [
       //   {
@@ -86,13 +121,38 @@ export default {
       //     key: 'name',
       //     width: 200,
       //   },
-      //   { title: 'Hình ảnh', key: 'image_url', slot: 'image', width: 120 },
+      //   { title: 'Hình ảnh', key: 'iimage_urlmage_url', slot: 'image', width: 120 },
       //   { title: 'Trạng thái hàng', key: 'status' },
       //   { title: 'Số lương', key: 'quantity' },
       //   { title: 'Thời gian tạo', key: 'created_at' },
       //   { title: 'Hành động', key: 'action', align: 'center', width: 120 },
       // ],
-      searchForm: {},
+      searchForm: {
+        status: 'Pending',
+        order_id: '',
+      },
+      statusOrder: [
+        {
+          title: 'Tất cả',
+          value: '',
+        },
+        {
+          title: 'Chờ xác nhận',
+          value: 'Pending',
+        },
+        {
+          title: 'Đã xác nhận',
+          value: 'Confirmed',
+        },
+        {
+          title: 'Hoàn thành',
+          value: 'Done',
+        },
+        {
+          title: 'Hủy bỏ',
+          value: 'Cancel',
+        },
+      ],
     }
   },
   methods: {
@@ -101,7 +161,20 @@ export default {
     },
     handleConfirmOrder(val) {
       chapNhanDonHang(val.id).then(res => {
-
+        this.$moshaToast('Chấp nhận đơn hàng thành công',
+          {
+            type: 'success',
+            transition: 'slide',
+            timeout: 2000,
+          })
+        this.getDataOrders()
+      }).catch(err => {
+        this.$moshaToast(err.response.data.message,
+          {
+            type: 'warning',
+            transition: 'slide',
+            timeout: 2000,
+          })
       })
     },
     handleCancelOrder() {
@@ -116,7 +189,7 @@ export default {
     },
     getDataOrders() {
       let load = this.$loading.show()
-      layDSorder().then(res => {
+      layDSorder(this.searchForm).then(res => {
         this.orderData = res.data
         load.hide()
       }).catch((error) => {

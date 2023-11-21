@@ -1,58 +1,82 @@
-<script setup>
-const statistics = [
-  {
-    title: 'Sản phẩm bán ra',
-    stats: '1.223',
-    icon: 'mdi-trending-up',
-    color: 'primary',
+<script>
+import { thongKeThang } from "@/api/statistic"
+
+export default {
+  created() {
+    this.getData()
   },
-  {
-    title: 'Số lượng khách mới',
-    stats: '129',
-    icon: 'mdi-account-outline',
-    color: 'success',
+  computed: {
+    month() {
+      const d = new Date()
+      return d.getMonth() + 1
+    },
   },
-  {
-    title: 'Số đơn đặt hàng',
-    stats: '883',
-    icon: 'mdi-cellphone-link',
-    color: 'warning',
+  data() {
+    return {
+      statistics: [
+        {
+          id: 'new_customers_last_month',
+          title: 'Số lượng khách mới',
+          icon: 'raphael:people',
+          link: '/khach-hang',
+          color: 'success',
+        },
+        {
+          id: 'total_products_sold',
+          title: 'Sản phẩm bán ra',
+          icon: 'gridicons:product-external',
+          link: '/products',
+          color: 'primary',
+        },
+        {
+          id: 'total_orders',
+          title: 'Số đơn đặt hàng',
+          link: '/order',
+          icon: 'lets-icons:order',
+          color: 'warning',
+        },
+        {
+          id: 'total_ratings',
+          link: '/danhgiasp',
+          title: 'Số lượt đánh giá',
+          icon: 'carbon:review',
+          color: 'info',
+        },
+      ],
+      statisticNum: {},
+    }
   },
-  {
-    title: 'Số lượt đánh giá',
-    stats: '100',
-    icon: 'mdi-currency-usd',
-    color: 'info',
+  methods: {
+    getData() {
+      thongKeThang().then(res => {
+        this.statisticNum = res.data
+      })
+    },
   },
-]
+}
 </script>
 
 <template>
   <VCard>
     <VCardItem>
-      <VCardTitle>Tổng quan bán hàng</VCardTitle>
-
-      <template #append>
-        <div class="me-n3">
-          <MoreBtn />
-        </div>
-      </template>
+      <VCardTitle class="font-weight-black">Tổng quan bán hàng trong tháng qua</VCardTitle>
     </VCardItem>
-
     <VCardText>
-      <h6 class="text-sm font-weight-medium mb-12">
-        <span>Số lượng sản phẩm bán ra  😎</span>
-        <span class="font-weight-regular"> trong tháng này</span>
-      </h6>
+<!--      <h3 class="font-weight-medium mb-12">-->
+<!--        <span>Số liệu thống kê trong tháng {{ month }} này 😎</span>-->
+<!--        <span class="font-weight-regular"> trong tháng này</span>-->
+<!--      </h3>-->
 
-      <VRow>
-        <VCol
-          v-for="item in statistics"
-          :key="item.title"
+      <VRow justify-sm="space-between">
+        <VCard
+          class="hover-card"
+          style="padding: 10px 16px; font-size: 16px"
+          v-for="(item,index) in statistics"
+          :key="index"
           cols="6"
           sm="3"
         >
-          <div class="d-flex align-center">
+          <router-link :to="item.link" class="d-flex align-center">
             <div class="me-3">
               <VAvatar
                 :color="item.color"
@@ -71,10 +95,16 @@ const statistics = [
               <span class="text-caption">
                 {{ item.title }}
               </span>
-              <span class="text-h6">{{ item.stats }}</span>
+              <span v-if="item.id == 'new_customers_last_month'" class="text-h6"
+              >{{ statisticNum.new_customers_last_month }}</span>
+              <span v-if="item.id == 'total_products_sold'" class="text-h6">{{
+                  statisticNum.total_products_sold
+                }}</span>
+              <span v-if="item.id == 'total_orders'" class="text-h6">{{ statisticNum.total_orders }}</span>
+              <span v-if="item.id == 'total_ratings'" class="text-h6">{{ statisticNum.total_ratings }}</span>
             </div>
-          </div>
-        </VCol>
+          </router-link>
+        </VCard>
       </VRow>
     </VCardText>
   </VCard>

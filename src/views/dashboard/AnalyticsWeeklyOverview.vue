@@ -1,134 +1,92 @@
-<script setup>
-import { hexToRgb } from '@layouts/utils'
-import VueApexCharts from 'vue3-apexcharts'
-import { useTheme } from 'vuetify'
-
-const vuetifyTheme = useTheme()
-
-const options = controlledComputed(() => vuetifyTheme.name.value, () => {
-  const currentTheme = ref(vuetifyTheme.current.value.colors)
-  const variableTheme = ref(vuetifyTheme.current.value.variables)
-  const disabledColor = `rgba(${ hexToRgb(currentTheme.value['on-surface']) },${ variableTheme.value['disabled-opacity'] })`
-  const borderColor = `rgba(${ hexToRgb(String(variableTheme.value['border-color'])) },${ variableTheme.value['border-opacity'] })`
-  
-  return {
-    chart: {
-      parentHeightOffset: 0,
-      toolbar: { show: false },
-    },
-    plotOptions: {
-      bar: {
-        borderRadius: 9,
-        distributed: true,
-        columnWidth: '40%',
-        endingShape: 'rounded',
-        startingShape: 'rounded',
-      },
-    },
-    stroke: {
-      width: 2,
-      colors: [currentTheme.value.surface],
-    },
-    legend: { show: false },
-    grid: {
-      borderColor,
-      strokeDashArray: 7,
-      padding: {
-        top: -1,
-        right: 0,
-        left: -12,
-        bottom: 5,
-      },
-    },
-    dataLabels: { enabled: false },
-    colors: [
-      currentTheme.value['grey-100'],
-      currentTheme.value['grey-100'],
-      currentTheme.value['grey-100'],
-      currentTheme.value.primary,
-      currentTheme.value['grey-100'],
-      currentTheme.value['grey-100'],
-    ],
-    states: {
-      hover: { filter: { type: 'none' } },
-      active: { filter: { type: 'none' } },
-    },
-    xaxis: {
-      categories: [
-        'Sun',
-        'Mon',
-        'Tue',
-        'Wed',
-        'Thu',
-        'Fri',
-        'Sat',
-      ],
-      tickPlacement: 'on',
-      labels: { show: false },
-      crosshairs: { opacity: 0 },
-      axisTicks: { show: false },
-      axisBorder: { show: false },
-    },
-    yaxis: {
-      show: true,
-      tickAmount: 4,
-      labels: {
-        offsetX: -17,
-        style: {
-          colors: disabledColor,
-          fontSize: '12px',
-        },
-        formatter: value => `${ value > 999 ? `${ (value / 1000).toFixed(0) }` : value }k`,
-      },
-    },
-  }
-})
-
-const series = [{
-  data: [
-    37,
-    57,
-    45,
-    75,
-    57,
-    40,
-    65,
-  ],
-}]
-</script>
-
 <template>
-  <VCard>
-    <VCardItem>
-      <VCardTitle>Weekly Overview</VCardTitle>
 
-      <template #append>
-        <div class="me-n3">
-          <MoreBtn />
-        </div>
-      </template>
-    </VCardItem>
-
-    <VCardText>
-      <VueApexCharts
-        type="bar"
-        :options="options"
-        :series="series"
-        :height="220"
-      />
-
-      <div class="d-flex align-center mb-3">
-        <h5 class="text-h5 me-4">
-          45%
-        </h5>
-        <p>
-          Your sales performance is 45% 😎 better compared to last month
-        </p>
-      </div>
-
-      <VBtn block>
-        Details
-      </VBtn>
-    </VCardText>
-  </VCard>
+  <div style="height: 300px">
+    <Line v-if="isShow" :data="dataLine" :options="options"/>
+  </div>
+  <div style="margin-top: 6px;">
+    <h5>Thống kê theo sản phẩm bán chạy nhất</h5>
+    <VSelect v-model="ProductIDSelected" density="compact" :items="products"
+             item-title="name" item-value="id" @update:modelValue="handleChangeProduct"
+    />
+  </div>
 </template>
+<script>
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js'
+import { Line } from 'vue-chartjs'
+import { thongKeSanPham } from "@/api/statistic"
+import { getTop5ProductBestSell } from "@/api/product"
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+)
+
+export default {
+  components: {
+    Line,
+  },
+  created() {
+    getTop5ProductBestSell().then(res => {
+      this.products = res.data
+      this.ProductIDSelected = res.data[0].id
+      this.getData()
+    })
+  },
+  data() {
+    return {
+      isShow: false,
+      products: [],
+      ProductIDSelected: '',
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          title: {
+            display: true,
+            fontSize: '16px',
+            text: "BIỂU ĐỒ SỐ LƯỢNG SẢN PHẨM BÁN TRONG NĂM 2023",
+            color: '#01a9fd',
+          },
+        },
+      },
+      dataLine: {
+        labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
+        datasets: [
+          {
+            label: '',
+            backgroundColor: '#f87979',
+            data: [],
+          },
+        ],
+      },
+    }
+  },
+  methods: {
+    handleChangeProduct() {
+      this.getData()
+    },
+    getData() {
+      this.isShow = false
+      thongKeSanPham({ product_id: this.ProductIDSelected }).then(res => {
+        this.dataLine.datasets[0].data = Object.values(res.data.product_overview)
+        this.dataLine.datasets[0].label = res.data.product_name
+        this.isShow = true
+      })
+    },
+  },
+}
+</script>

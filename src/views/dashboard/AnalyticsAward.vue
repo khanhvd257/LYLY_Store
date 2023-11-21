@@ -3,38 +3,60 @@ import triangleDark from '@images/misc/triangle-dark.png'
 import triangleLight from '@images/misc/triangle-light.png'
 import trophy from '@images/misc/trophy.png'
 import { useTheme } from 'vuetify'
+import { thongKeDoanhThuThang } from "@/api/statistic"
 
 const { global } = useTheme()
 const triangleBg = computed(() => global.name.value === 'light' ? triangleLight : triangleDark)
 </script>
 
+<script>
+import { thongKeDoanhThuThang } from "@/api/statistic"
+
+export default {
+  data() {
+    return {
+      dataRevenue: {
+        revenue: 0,
+        month: 1,
+      },
+    }
+  },
+  created() {
+    thongKeDoanhThuThang().then(res => {
+      this.dataRevenue = res.data
+    })
+  },
+}
+</script>
+
 <template>
   <VCard
-    title="Doanh thu tháng này! 🎉"
-    subtitle="Từ 01/11/2023 - 12/11/2023"
+    height="180"
     class="position-relative"
   >
+    <VCardTitle>
+      <h3 style="text-align: center">
+        {{`Doanh thu tháng ${dataRevenue.month} này! 🎉`}}
+      </h3>
+    </VCardTitle>
     <VCardText>
-      <h5 class="text-2xl font-weight-medium text-primary">
-        76.000.000 VNĐ
-      </h5>
-      <p>78% Mục tiêu 🚀</p>
-      <VBtn size="small">
-        Xem thêm
-      </VBtn>
+      <h1 class="text-center mt-2 text-primary">
+        {{ formatPrice(dataRevenue.revenue) }}
+      </h1>
+
     </VCardText>
 
     <!-- Triangle Background -->
-    <VImg
-      :src="triangleBg"
-      class="triangle-bg flip-in-rtl"
-    />
+<!--    <VImg-->
+<!--      :src="triangleBg"-->
+<!--      class="triangle-bg flip-in-rtl"-->
+<!--    />-->
 
-    <!-- Trophy -->
-    <VImg
-      :src="trophy"
-      class="trophy"
-    />
+<!--    &lt;!&ndash; Trophy &ndash;&gt;-->
+<!--    <VImg-->
+<!--      :src="trophy"-->
+<!--      class="trophy"-->
+<!--    />-->
   </VCard>
 </template>
 

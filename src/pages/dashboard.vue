@@ -9,6 +9,8 @@ import AnalyticsTransactions from '@/views/dashboard/AnalyticsTransactions.vue'
 import AnalyticsUserTable from '@/views/dashboard/AnalyticsUserTable.vue'
 import AnalyticsWeeklyOverview from '@/views/dashboard/AnalyticsWeeklyOverview.vue'
 import CardStatisticsVertical from '@core/components/cards/CardStatisticsVertical.vue'
+import ChartHome from "@/components/ChartHome.vue"
+import OrderProduct from "@/views/pages/order/OrderProducts.vue"
 
 const totalProfit = {
   title: 'Total Profit',
@@ -35,81 +37,91 @@ const newProject = {
       cols="12"
       md="4"
     >
-      <AnalyticsAward />
+      <AnalyticsAward/>
     </VCol>
 
     <VCol
       cols="12"
       md="8"
     >
-      <AnalyticsTransactions />
+      <AnalyticsTransactions/>
     </VCol>
 
-<!--    <VCol-->
-<!--      cols="12"-->
-<!--      md="4"-->
-<!--    >-->
-<!--      <AnalyticsWeeklyOverview />-->
-<!--    </VCol>-->
+    <!--    <VCol-->
+    <!--      cols="12"-->
+    <!--      md="4"-->
+    <!--    >-->
+    <!--      <AnalyticsWeeklyOverview />-->
+    <!--    </VCol>-->
 
-<!--    <VCol-->
-<!--      cols="12"-->
-<!--      md="4"-->
-<!--    >-->
-<!--      <AnalyticsTotalEarning />-->
-<!--    </VCol>-->
+    <!--    <VCol-->
+    <!--      cols="12"-->
+    <!--      md="4"-->
+    <!--    >-->
+    <!--      <AnalyticsTotalEarning />-->
+    <!--    </VCol>-->
 
-<!--    <VCol-->
-<!--      cols="12"-->
-<!--      md="4"-->
-<!--    >-->
-<!--      <VRow class="match-height">-->
-<!--        <VCol-->
-<!--          cols="12"-->
-<!--          sm="6"-->
-<!--        >-->
-<!--          <AnalyticsTotalProfitLineCharts />-->
-<!--        </VCol>-->
+    <!--    <VCol-->
+    <!--      cols="12"-->
+    <!--      md="4"-->
+    <!--    >-->
+    <!--      <VRow class="match-height">-->
+    <!--        <VCol-->
+    <!--          cols="12"-->
+    <!--          sm="6"-->
+    <!--        >-->
+    <!--          <AnalyticsTotalProfitLineCharts />-->
+    <!--        </VCol>-->
 
-<!--        <VCol-->
-<!--          cols="12"-->
-<!--          sm="6"-->
-<!--        >-->
-<!--          <CardStatisticsVertical v-bind="totalProfit" />-->
-<!--        </VCol>-->
+    <!--        <VCol-->
+    <!--          cols="12"-->
+    <!--          sm="6"-->
+    <!--        >-->
+    <!--          <CardStatisticsVertical v-bind="totalProfit" />-->
+    <!--        </VCol>-->
 
-<!--        <VCol-->
-<!--          cols="12"-->
-<!--          sm="6"-->
-<!--        >-->
-<!--          <CardStatisticsVertical v-bind="newProject" />-->
-<!--        </VCol>-->
+    <!--        <VCol-->
+    <!--          cols="12"-->
+    <!--          sm="6"-->
+    <!--        >-->
+    <!--          <CardStatisticsVertical v-bind="newProject" />-->
+    <!--        </VCol>-->
 
-<!--        <VCol-->
-<!--          cols="12"-->
-<!--          sm="6"-->
-<!--        >-->
-<!--          <AnalyticsBarCharts />-->
-<!--        </VCol>-->
-<!--      </VRow>-->
-<!--    </VCol>-->
+    <!--        <VCol-->
+    <!--          cols="12"-->
+    <!--          sm="6"-->
+    <!--        >-->
+    <!--          <AnalyticsBarCharts />-->
+    <!--        </VCol>-->
+    <!--      </VRow>-->
+    <!--    </VCol>-->
 
     <VCol
       cols="12"
       md="4"
     >
-      <AnalyticsSalesByCountries />
+      <VCard height="400px" style="padding: 8px 16px">
+        <AnalyticsWeeklyOverview/>
+      </VCard>
     </VCol>
 
     <VCol
       cols="12"
       md="8"
     >
-      <AnalyticsDepositWithdraw />
+      <ChartHome/>
+    </VCol>
+  </VRow>
+  <VRow>
+    <VCol sm="12">
+      <VCard>
+        <VCardTitle>
+          <h3>
+            Danh sách đơn đặt hàng
+          </h3></VCardTitle>
+        <OrderProduct/>
+      </VCard>
     </VCol>
 
-    <VCol cols="12">
-      <AnalyticsUserTable />
-    </VCol>
   </VRow>
 </template>

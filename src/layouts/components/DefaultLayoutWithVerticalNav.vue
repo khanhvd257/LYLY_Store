@@ -53,50 +53,50 @@ const upgradeBanner = computed(() => {
       />
       <VerticalNavLink
         :item="{
-          title: 'Quản lý tài khoản',
+          title: 'Tài khoản',
           icon: 'mdi-account-cog-outline',
           to: '/account-settings',
         }"
       />
       <VerticalNavLink
         :item="{
-          title: 'Quản lý sản phẩm',
+          title: 'Sản phẩm',
           icon: 'fluent-mdl2:product-variant',
           to: '/products',
         }"
       />
       <VerticalNavLink
         :item="{
-          title: 'Quản lý danh mục',
+          title: 'Danh mục',
           icon: 'carbon:category',
           to: '/category',
         }"
       />
       <VerticalNavLink
         :item="{
-          title: 'Quản lý doanh thu',
+          title: 'Doanh thu',
           icon: 'game-icons:cash',
           to: '/doanh-thu',
         }"
       />
       <VerticalNavLink
         :item="{
-          title: 'Quản lý order',
-          icon: 'icon-park-outline:shopping',
+          title: 'Đơn hàng',
+          icon: 'lets-icons:order',
           to: '/order-products',
         }"
       />
       <VerticalNavLink
         :item="{
-          title: 'Quản lý khách hàng',
-          icon: 'game-icons:cash',
+          title: 'Khách hàng',
+          icon: 'raphael:people',
           to: '/khach-hang',
         }"
       />
       <VerticalNavLink
         :item="{
-          title: 'Quản lý đánh giá sản phẩm',
-          icon: 'game-icons:cash',
+          title: 'Đánh giá sản phẩm',
+          icon: 'carbon:review',
           to: '/danhgiasp',
         }"
       />

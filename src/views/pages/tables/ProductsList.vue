@@ -130,7 +130,7 @@ export default {
         { title: 'Hình ảnh', key: 'image_url', slot: 'image', width: 120 },
         { title: 'Số lương', key: 'quantity' },
         { title: 'Trạng thái hàng', key: 'status' },
-        { title: 'Tình trạng hàng', slot: 'stock', key: 'stock' },
+        { title: 'Tình trạng hàng',  key: 'stock' },
         { title: 'Thời gian tạo', key: 'created_at' },
         { title: 'Hành động', key: 'action', align: 'center', width: 120 },
       ],

@@ -12,6 +12,9 @@
           {{ item.raw.product.name }}
         </div>
       </template>
+      <template v-slot:item.rating="{item}">
+         <VRating size="small" disabled length="5" :model-value="item.raw.rating"/>
+      </template>
       <template v-slot:item.product.image_url="{item}">
         <img class="img-product" :src="item.raw.product.image_url" height="60" width="60" alt="">
       </template>
@@ -41,8 +44,11 @@ export default {
           align: 'start',
           sortable: false,
           key: 'username',
-          width: 200,
+          width: 150,
         },
+        { title: 'Số sao đánh giá', slot: 'rating', key: 'rating', align: 'center', width: 200 },
+        { title: 'Đánh giá', key: 'comment', align: 'center', width: 200 },
+
         {
           title: 'Tên sản phẩm',
           align: 'start',
@@ -52,9 +58,6 @@ export default {
           width: 200,
         },
         { title: 'Ảnh sản phẩm', key: 'product.image_url', slot: 'image', width: 200 },
-
-        { title: 'Đánh giá', key: 'comment', align: 'center', width: 200 },
-        { title: 'Số sao đánh giá', key: 'rating', align: 'center', width: 200 },
       ],
       searchForm: {
         category_id: [],

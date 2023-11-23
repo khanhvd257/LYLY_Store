@@ -18,7 +18,7 @@ export function thongKeThang() {
 
 export function thongKeDoanhThuThang() {
   return request({
-    url: '/statistic/doanh-thu',
+    url: '/statistic/overview',
     headers: { 'Content-Type': 'application/json' },
     method: Method.GET,
   })

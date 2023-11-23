@@ -1,5 +1,5 @@
 <script setup>
-import logo from '@images/logo.svg?raw'
+import logo from '@images/logos/LYLY_STORE.png'
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
 import { useDisplay } from 'vuetify'
 
@@ -58,19 +58,12 @@ const handleNavScroll = evt => {
           to="/"
           class="app-logo d-flex align-center gap-x-3 app-title-wrapper"
         >
-          <div
-            class="d-flex"
-            v-html="logo"
-          />
-
-          <h1 class="font-weight-medium leading-normal text-xl text-uppercase">
-            LYLY Store
-          </h1>
+          <img width="200" height="60"  :src="logo">
         </RouterLink>
       </slot>
     </div>
     <slot name="before-nav-items">
-      <div class="vertical-nav-items-shadow" />
+      <div class="vertical-nav-items-shadow"/>
     </slot>
     <slot
       name="nav-items"
@@ -82,11 +75,11 @@ const handleNavScroll = evt => {
         :options="{ wheelPropagation: false }"
         @ps-scroll-y="handleNavScroll"
       >
-        <slot />
+        <slot/>
       </PerfectScrollbar>
     </slot>
 
-    <slot name="after-nav-items" />
+    <slot name="after-nav-items"/>
   </Component>
 </template>
 

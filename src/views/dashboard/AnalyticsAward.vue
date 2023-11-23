@@ -43,7 +43,9 @@ export default {
       <h1 class="text-center mt-2 text-primary">
         {{ formatPrice(dataRevenue.revenue) }}
       </h1>
-
+      <div style="display: flex; justify-content: center; margin-top: 1rem">
+        <VBtn>Chi tiết doanh thu</VBtn>
+      </div>
     </VCardText>
 
     <!-- Triangle Background -->

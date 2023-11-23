@@ -1,7 +1,6 @@
 import axios from 'axios'
 // import https from "https"
 import qs from 'qs'
-// Tạo một phiên bản Axios đã cấu hình với các tùy chọn chung
 
 const BASE_URL = 'http://127.0.0.1:8000/api'
 const service = axios.create({
@@ -59,41 +58,41 @@ service.interceptors.request.use(
   },
 )
 const closeLoading = target => {
-  if (!target.config || !target.config.loading) return true;
+  if (!target.config || !target.config.loading) return true
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      target.config.loading.hide();
-      resolve();
-    }, 200);
-  });
-};
+      target.config.loading.hide()
+      resolve()
+    }, 200)
+  })
+}
 
 service.interceptors.response.use(
   async response => {
-    await closeLoading(response);
+    await closeLoading(response)
 
-    return response.data;
+    return response.data
   },
   async error => {
     // if (process.server) return Promise.reject(error);
-    await closeLoading(error);
-    const errorResponse = error.response || {};
-    const errorData = errorResponse.data || {};
+    await closeLoading(error)
+    const errorResponse = error.response || {}
+    const errorData = errorResponse.data || {}
 
     if (errorResponse.status === 401) {
-      console.log(errorData.message);
+      console.log(errorData.message)
     }
-     if (errorResponse.status === 404) {
+    if (errorResponse.status === 404) {
       // Message.error({content: errorData.message || 'Bad request', duration: 5})
-       console.log(errorResponse.data);
+      console.log(errorResponse.data)
     } else if (errorResponse.status == 402) {
-       console.log(errorResponse.data);
-    } else if (errorResponse.status == 500){
-       console.log(errorResponse.data);
+      console.log(errorResponse.data)
+    } else if (errorResponse.status == 500) {
+      console.log(errorResponse.data)
     }
-    return Promise.reject(error);
-  }
-);
+    return Promise.reject(error)
+  },
+)
 const handleGetToken = () => {
   // this.service.
 }

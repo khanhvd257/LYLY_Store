@@ -109,7 +109,7 @@ export default {
 }
 
 .product-img {
-  border-radius: 12px;
+  border-radius: 16px;
   max-width: 600px;
   max-height: 700px;
   margin: 0 10px;

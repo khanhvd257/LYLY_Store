@@ -18,6 +18,7 @@ html {
 .loading-logo {
   position: absolute;
   inset-block-start: 40%;
+  transform: translateX(-10%);
   inset-inline-start: calc(50% - 45px);
 }
 

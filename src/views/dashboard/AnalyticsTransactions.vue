@@ -59,7 +59,7 @@ export default {
 <template>
   <VCard>
     <VCardItem>
-      <VCardTitle class="font-weight-black">Tổng quan bán hàng trong tháng qua</VCardTitle>
+      <VCardTitle class="font-weight-black">Tổng quan bán hàng trong 30 ngày qua</VCardTitle>
     </VCardItem>
     <VCardText>
 <!--      <h3 class="font-weight-medium mb-12">-->

@@ -2,7 +2,7 @@ import axios from 'axios'
 // import https from "https"
 import qs from 'qs'
 
-const BASE_URL = 'http://127.0.0.1:8000/api'
+const BASE_URL = 'http://192.168.1.17:8000/api'
 const service = axios.create({
   timeout: 10000,
   baseURL: BASE_URL,

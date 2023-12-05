@@ -51,13 +51,13 @@ const upgradeBanner = computed(() => {
           to: '/dashboard',
         }"
       />
-      <VerticalNavLink
-        :item="{
-          title: 'Tài khoản',
-          icon: 'mdi-account-cog-outline',
-          to: '/account-settings',
-        }"
-      />
+<!--      <VerticalNavLink-->
+<!--        :item="{-->
+<!--          title: 'Tài khoản',-->
+<!--          icon: 'mdi-account-cog-outline',-->
+<!--          to: '/account-settings',-->
+<!--        }"-->
+<!--      />-->
       <VerticalNavLink
         :item="{
           title: 'Sản phẩm',
@@ -72,13 +72,13 @@ const upgradeBanner = computed(() => {
           to: '/category',
         }"
       />
-      <VerticalNavLink
-        :item="{
-          title: 'Doanh thu',
-          icon: 'game-icons:cash',
-          to: '/doanh-thu',
-        }"
-      />
+<!--      <VerticalNavLink-->
+<!--        :item="{-->
+<!--          title: 'Doanh thu',-->
+<!--          icon: 'game-icons:cash',-->
+<!--          to: '/doanh-thu',-->
+<!--        }"-->
+<!--      />-->
       <VerticalNavLink
         :item="{
           title: 'Đơn hàng',

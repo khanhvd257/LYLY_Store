@@ -26,6 +26,7 @@ export default {
       loginForm: {
         username: '',
         password: '',
+        message: '',
         remember: false,
       },
       error: false,
@@ -38,13 +39,20 @@ export default {
   },
   methods: {
     handleSubmit() {
+      debugger
       login(this.loginForm).then(res => {
-        if (res.success) {
+        const role = res.data.role
+        if (role == 0) {
+          this.message = 'Không có quyền truy cập trang quản trị'
+          this.error = true
+        } else {
           localStorage.setItem('access_token', res.data.token)
+
           this.error = false
           router.push("/dashboard")
         }
       }).catch(err => {
+        this.message = 'Sai thông tin tài khoản hoặc mật khẩu'
         this.error = true
       })
     },
@@ -99,7 +107,7 @@ export default {
                 :append-inner-icon="isPasswordVisible ? 'mdi-eye-off-outline' : 'mdi-eye-outline'"
                 @click:append-inner="isPasswordVisible = !isPasswordVisible"
               />
-              <VAlert style="margin-top: 6px" color="error" v-if="error" text="Sai tài khoản / mật khẩu"/>
+              <VAlert style="margin-top: 6px" color="error" v-if="error" :text="message"/>
               <!-- remember me checkbox -->
               <div class="d-flex align-center justify-space-between flex-wrap mt-1 mb-4">
                 <VCheckbox

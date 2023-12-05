@@ -27,19 +27,26 @@
       class="elevation-1"
     >
       <template v-slot:item.order_details[0].product.image_url="{item}">
-        <div class="product-img">
-          <img :src="item.raw.order_details[0].product.image_url" :alt="item.raw.order_details[0]">
+        <div>
+          <VImg cover :key="i" class="product-img" v-for="(val,i) in item.value.order_details" :src="val.product.image_url" :alt="val"/>
         </div>
       </template>
       <template v-slot:item.order_details[0].quantity="{item}">
-        <div class="product-img">
-          <span> {{ item.raw.order_details[0].quantity }}</span>
+        <div class="product-num" :key="i" v-for="(val,i) in item.value.order_details" >
+          <span> {{ val.quantity }}</span>
         </div>
       </template>
       <template v-slot:item.order_details[0].product.name="{item}">
-        <div class="product-name clamp-text">
-          <span>{{ item.raw.order_details[0].product.name }}</span>
+        <div :key="i" v-for="(val,i) in item.value.order_details" class="product-name clamp-text">
+          <span> - {{
+
+            val.product.name
+            }}</span>
         </div>
+
+      </template>
+      <template v-slot:item.total_price="{item}">
+        <span>{{ formatPrice(item.raw.total_price) }}</span>
       </template>
       <template v-slot:item.created_at="{item}">
         <span>{{ formatDate(item.raw.created_at) }}</span>
@@ -89,6 +96,9 @@ export default {
           title: 'Tên Khách Hàng', key: 'username', width: 180,
         },
         {
+          title: 'Tổng đơn hàng', key: 'total_price',slot: 'total_price' ,width: 180,
+        },
+        {
           title: 'Hình ảnh',
           key: 'order_details[0].product.image_url',
           align: 'center',
@@ -110,7 +120,7 @@ export default {
         },
         { title: 'Thời Gian Đặt hàng ', align: 'center', key: 'order_date', width: 150 },
         { title: 'Ghi Chú', key: 'note', width: 200 },
-        { title: 'Địa Điểm Giao Hàng', key: 'delivery_address', width: 200 },
+        { title: 'Địa Điểm Giao Hàng', key: 'delivery_address', width: 300 },
         { title: 'Trạng Thái Đơn Hàng', key: 'status', width: 100, align: 'center' },
       ],
       // header: [
@@ -204,10 +214,18 @@ export default {
 }
 </script>
 <style scoped lang="scss">
+.product-name{
+  width: 100%;
+  margin-top: .6rem;
+}
+.product-num{
+  line-height: 60px;
+}
 .product-img {
   width: 60px;
   height: 60px;
   margin: 6px 10px;
+  border-radius: 6px;
 
   img {
     object-fit: cover;
